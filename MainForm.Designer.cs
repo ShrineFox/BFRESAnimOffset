@@ -59,12 +59,13 @@
             this.tlp_TranslateX = new System.Windows.Forms.TableLayoutPanel();
             this.lbl_TranslateX = new System.Windows.Forms.Label();
             this.num_TranslateX = new System.Windows.Forms.NumericUpDown();
+            this.btn_Apply = new System.Windows.Forms.Button();
+            this.chk_KeepSign = new System.Windows.Forms.CheckBox();
             this.rtb_KeyframeData = new System.Windows.Forms.RichTextBox();
             this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_Apply = new System.Windows.Forms.Button();
             this.tlp_Main.SuspendLayout();
             this.groupBox_Offsets.SuspendLayout();
             this.tlp_Offsets.SuspendLayout();
@@ -144,6 +145,7 @@
             this.tlp_Offsets.Controls.Add(this.tlp_RotateX, 1, 0);
             this.tlp_Offsets.Controls.Add(this.tlp_TranslateX, 0, 0);
             this.tlp_Offsets.Controls.Add(this.btn_Apply, 2, 3);
+            this.tlp_Offsets.Controls.Add(this.chk_KeepSign, 1, 3);
             this.tlp_Offsets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlp_Offsets.Location = new System.Drawing.Point(3, 18);
             this.tlp_Offsets.Name = "tlp_Offsets";
@@ -623,6 +625,30 @@
             this.num_TranslateX.TabIndex = 1;
             this.num_TranslateX.Click += new System.EventHandler(this.XTranslation_Click);
             // 
+            // btn_Apply
+            // 
+            this.btn_Apply.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_Apply.Location = new System.Drawing.Point(237, 207);
+            this.btn_Apply.Name = "btn_Apply";
+            this.btn_Apply.Size = new System.Drawing.Size(112, 64);
+            this.btn_Apply.TabIndex = 9;
+            this.btn_Apply.Text = "Apply Changes";
+            this.btn_Apply.UseVisualStyleBackColor = true;
+            this.btn_Apply.Click += new System.EventHandler(this.Apply_Click);
+            // 
+            // chk_KeepSign
+            // 
+            this.chk_KeepSign.AutoSize = true;
+            this.chk_KeepSign.Checked = true;
+            this.chk_KeepSign.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chk_KeepSign.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chk_KeepSign.Location = new System.Drawing.Point(140, 207);
+            this.chk_KeepSign.Name = "chk_KeepSign";
+            this.chk_KeepSign.Size = new System.Drawing.Size(91, 64);
+            this.chk_KeepSign.TabIndex = 10;
+            this.chk_KeepSign.Text = "Keep Sign";
+            this.chk_KeepSign.UseVisualStyleBackColor = true;
+            // 
             // rtb_KeyframeData
             // 
             this.rtb_KeyframeData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -664,20 +690,9 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveFile_Click);
-            // 
-            // btn_Apply
-            // 
-            this.btn_Apply.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_Apply.Location = new System.Drawing.Point(237, 207);
-            this.btn_Apply.Name = "btn_Apply";
-            this.btn_Apply.Size = new System.Drawing.Size(112, 64);
-            this.btn_Apply.TabIndex = 9;
-            this.btn_Apply.Text = "Apply Changes";
-            this.btn_Apply.UseVisualStyleBackColor = true;
-            this.btn_Apply.Click += new System.EventHandler(this.Apply_Click);
             // 
             // MainForm
             // 
@@ -692,6 +707,7 @@
             this.tlp_Main.ResumeLayout(false);
             this.groupBox_Offsets.ResumeLayout(false);
             this.tlp_Offsets.ResumeLayout(false);
+            this.tlp_Offsets.PerformLayout();
             this.tlp_ScaleZ.ResumeLayout(false);
             this.tlp_ScaleZ.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.num_ScaleZ)).EndInit();
@@ -765,6 +781,7 @@
         private System.Windows.Forms.NumericUpDown num_RotateX;
         private System.Windows.Forms.RichTextBox rtb_KeyframeData;
         private System.Windows.Forms.Button btn_Apply;
+        private System.Windows.Forms.CheckBox chk_KeepSign;
     }
 }
 

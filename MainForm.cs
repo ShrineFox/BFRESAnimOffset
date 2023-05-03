@@ -9,7 +9,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShrineFox.IO;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace BFRESAnimOffset
 {
@@ -27,7 +27,7 @@ namespace BFRESAnimOffset
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
-            filePath = ShrineFox.IO.WinFormsEvents.FilePath_Click("Choose .anim file...", false, new string[] { "Animation (.anim)" }).First();
+            filePath = FilePath_Click("Choose .anim file...", false, new string[] { "Animation (.anim)" }).First();
             OpenFile();
             PopulateList();
         }
@@ -45,6 +45,9 @@ namespace BFRESAnimOffset
 
         private void OpenFile()
         {
+            if (string.IsNullOrEmpty(filePath))
+                return;
+
             fileLines = File.ReadAllLines(filePath).ToList();
             
             for (int i = 0; i < fileLines.Count(); i++)
@@ -112,13 +115,9 @@ namespace BFRESAnimOffset
                     Key key = new Key();
                     string[] splitLines = fileLines[i].Split(' ').ToArray();
                     key.ID = Convert.ToInt32(splitLines[1]);
-                    key.Value = Convert.ToSingle(splitLines[2]);
+                    key.Value = Convert.ToDouble(splitLines[2]);
                     key.Data = fileLines[i].Substring(fileLines[i].IndexOf(splitLines[2]) + splitLines[2].Length).Replace(";", "").Trim();
                     keyData.Add(key);
-
-                    // TODO: Actually remove line?
-                    // Remove line
-                    fileLines.RemoveAt(i);
                 }
 
                 if (fileLines[i].Trim() == "}")
@@ -267,21 +266,24 @@ namespace BFRESAnimOffset
 
         private List<Key> UpdateKeyValues(List<Key> keys, decimal value)
         {
-            float offset = Convert.ToSingle(value);
+            double offset = Convert.ToDouble(value);
             foreach (var key in keys)
             {
-                // TODO: Match signage when adding value
-                //if ((key.Value < 0 && offset >= 0) || (key.Value >= 0 && offset > 0))
-                    //key.Value *= -1;
-                
-                key.Value += offset;
+                // If value is negative and offset is positive
+                // or both values are negative, subtract offset
+                if (chk_KeepSign.Checked && (key.Value < 0 && offset > 0) || (key.Value < 0 && offset < 0))
+                    key.Value -= offset;
+                else
+                    key.Value += offset;
             }
             return keys;
         }
 
         private void SaveFile_Click(object sender, EventArgs e)
         {
-            filePath = ShrineFox.IO.WinFormsEvents.FilePath_Click("Save .anim file...", false, new string[] { "Animation (.anim)" }).First();
+            filePath = FilePath_Click("Save .anim file...", false, new string[] { "Animation (.anim)" }, true).First();
+            if (string.IsNullOrEmpty(filePath))
+                return;
 
             List<string> newLines = new List<string>();
 
@@ -289,13 +291,13 @@ namespace BFRESAnimOffset
             string type = "";
             for (int i = 0; i < fileLines.Count(); i++)
             {
-                newLines.Add(fileLines[i]);
                 if (fileLines[i].StartsWith("anim "))
                 {
                     string[] splitLine = fileLines[i].Split(' ');
                     name = splitLine.Reverse().ToArray()[3];
                     type = splitLine.Reverse().ToArray()[4];
                 }
+
                 if (fileLines[i].StartsWith("  keys {"))
                 {
                     List<Key> keys = new List<Key>();
@@ -336,10 +338,51 @@ namespace BFRESAnimOffset
                     foreach (var key in keys)
                         newLines.Add($" {key.ID} {key.Value} {key.Data}");
                 }
+
+                // Add original line if it's not a key line
+                if (fileLines[i].StartsWith(" ") && !fileLines[i].StartsWith(" }")) { }
+                else
+                    newLines.Add(fileLines[i]);
             }
 
             File.WriteAllLines(filePath, newLines);
-            ShrineFox.IO.WinFormsDialogs.OKMsgBox("Save Successful", $"Successfully saved data to new file:\n\n{filePath}");
+            MessageBox.Show($"Successfully saved data to new file:\n\n{filePath}", "Save Successful");
+        }
+
+        public static List<string> FilePath_Click(string title = "Choose File...", bool multiSelect = false,
+            string[] filters = null, bool save = false)
+        {
+            if (save)
+            {
+                CommonSaveFileDialog dialog = new CommonSaveFileDialog();
+
+                dialog.Title = title;
+                if (filters != null)
+                    foreach (var filter in filters)
+                    {
+                        string[] filterParts = filter.Split('(');
+                        dialog.Filters.Add(new CommonFileDialogFilter(filterParts[0].TrimEnd(), filterParts[1].TrimEnd(')')));
+                    }
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    return new List<string>() { dialog.FileName };
+            }
+            else
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+
+                dialog.Title = title;
+                dialog.Multiselect = multiSelect;
+                if (filters != null)
+                    foreach (var filter in filters)
+                    {
+                        string[] filterParts = filter.Split('(');
+                        dialog.Filters.Add(new CommonFileDialogFilter(filterParts[0].TrimEnd(), filterParts[1].TrimEnd(')')));
+                    }
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    return new List<string>(dialog.FileNames);
+            }
+
+            return new List<string>() { "" };
         }
     }
 
@@ -360,7 +403,7 @@ namespace BFRESAnimOffset
     public class Key
     {
         public int ID { get; set; } = 0;
-        public float Value { get; set; } = 0f;
+        public double Value { get; set; } = 0f;
         public string Data { get; set; } = "";
     }
 }
