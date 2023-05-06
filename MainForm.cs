@@ -116,7 +116,7 @@ namespace BFRESAnimOffset
                     string[] splitLines = fileLines[i].Split(' ').ToArray();
                     key.ID = Convert.ToInt32(splitLines[1]);
                     key.Value = Convert.ToDouble(splitLines[2]);
-                    key.Data = fileLines[i].Substring(fileLines[i].IndexOf(splitLines[2]) + splitLines[2].Length).Replace(";", "").Trim();
+                    key.Data = fileLines[i].Substring(fileLines[i].IndexOf(splitLines[2]) + splitLines[2].Length).Trim();
                     keyData.Add(key);
                 }
 
@@ -291,6 +291,11 @@ namespace BFRESAnimOffset
             string type = "";
             for (int i = 0; i < fileLines.Count(); i++)
             {
+                // Add original line if it's not a key line
+                if (fileLines[i].StartsWith(" ") && !fileLines[i].StartsWith("  ") && !fileLines[i].StartsWith(" }")) { }
+                else
+                    newLines.Add(fileLines[i]);
+
                 if (fileLines[i].StartsWith("anim "))
                 {
                     string[] splitLine = fileLines[i].Split(' ');
@@ -336,13 +341,8 @@ namespace BFRESAnimOffset
                     }
                     // Add key data to list
                     foreach (var key in keys)
-                        newLines.Add($" {key.ID} {key.Value} {key.Data}");
+                        newLines.Add($" {key.ID} {String.Format("{0:0.000000}", key.Value)} {key.Data}");
                 }
-
-                // Add original line if it's not a key line
-                if (fileLines[i].StartsWith(" ") && !fileLines[i].StartsWith(" }")) { }
-                else
-                    newLines.Add(fileLines[i]);
             }
 
             File.WriteAllLines(filePath, newLines);
