@@ -135,5 +135,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LegacySwitchLibraries\Syroot.NintenTools.Bfres\Syroot.NintenTools.NSW.Bfres.csproj">
+      <Project>{142297e2-54e5-4c6d-958c-2793aaf42423}</Project>
+      <Name>Syroot.NintenTools.NSW.Bfres</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -66,6 +66,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chk_UseHierarchy = new System.Windows.Forms.CheckBox();
+            this.loadBFRESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlp_Main.SuspendLayout();
             this.groupBox_Offsets.SuspendLayout();
             this.tlp_Offsets.SuspendLayout();
@@ -135,6 +137,7 @@
             this.tlp_Offsets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlp_Offsets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlp_Offsets.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlp_Offsets.Controls.Add(this.chk_UseHierarchy, 0, 3);
             this.tlp_Offsets.Controls.Add(this.tlp_ScaleZ, 2, 2);
             this.tlp_Offsets.Controls.Add(this.tlp_RotateZ, 1, 2);
             this.tlp_Offsets.Controls.Add(this.tlp_TranslateZ, 0, 2);
@@ -664,7 +667,8 @@
             // 
             this.menuStrip_Main.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.loadBFRESToolStripMenuItem});
             this.menuStrip_Main.Location = new System.Drawing.Point(0, 0);
             this.menuStrip_Main.Name = "menuStrip_Main";
             this.menuStrip_Main.Size = new System.Drawing.Size(752, 28);
@@ -683,16 +687,35 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveFile_Click);
+            // 
+            // chk_UseHierarchy
+            // 
+            this.chk_UseHierarchy.AutoSize = true;
+            this.chk_UseHierarchy.Dock = System.Windows.Forms.DockStyle.Right;
+            this.chk_UseHierarchy.Enabled = false;
+            this.chk_UseHierarchy.Location = new System.Drawing.Point(3, 207);
+            this.chk_UseHierarchy.Name = "chk_UseHierarchy";
+            this.chk_UseHierarchy.Size = new System.Drawing.Size(111, 64);
+            this.chk_UseHierarchy.TabIndex = 11;
+            this.chk_UseHierarchy.Text = "Use Hierarchy";
+            this.chk_UseHierarchy.UseVisualStyleBackColor = true;
+            // 
+            // loadBFRESToolStripMenuItem
+            // 
+            this.loadBFRESToolStripMenuItem.Name = "loadBFRESToolStripMenuItem";
+            this.loadBFRESToolStripMenuItem.Size = new System.Drawing.Size(110, 24);
+            this.loadBFRESToolStripMenuItem.Text = "Load BFRES...";
+            this.loadBFRESToolStripMenuItem.Click += new System.EventHandler(this.LoadBFRES_Click);
             // 
             // MainForm
             // 
@@ -782,6 +805,8 @@
         private System.Windows.Forms.RichTextBox rtb_KeyframeData;
         private System.Windows.Forms.Button btn_Apply;
         private System.Windows.Forms.CheckBox chk_KeepSign;
+        private System.Windows.Forms.CheckBox chk_UseHierarchy;
+        private System.Windows.Forms.ToolStripMenuItem loadBFRESToolStripMenuItem;
     }
 }
 

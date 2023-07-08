@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Syroot.NintenTools.NSW.Bfres;
 
 namespace BFRESAnimOffset
 {
@@ -18,6 +19,7 @@ namespace BFRESAnimOffset
         public static string filePath;
         public static List<string> fileLines;
         public static List<Bone> bones;
+        public static ResFile resFile;
 
         public MainForm()
         {
@@ -249,7 +251,26 @@ namespace BFRESAnimOffset
         {
             Bone bone = bones.Single(x => x.Name.Equals(listBox_Bones.SelectedItem.ToString()));
 
-            // TODO: Match rounding?
+            if (!chk_UseHierarchy.Checked)
+                ApplyValueChange(bone);
+            else
+            {
+
+                foreach (var model in resFile.Models)
+                {
+                    foreach (var bonee in model.Skeleton.Bones)
+                    {
+
+                    }
+                }
+            }
+
+            UpdateKeyDataPrintout(bone);
+            ResetOffsetValues();
+        }
+
+        private void ApplyValueChange(Bone bone)
+        {
             bone.TranslateX = UpdateKeyValues(bone.TranslateX, num_TranslateX.Value);
             bone.TranslateY = UpdateKeyValues(bone.TranslateY, num_TranslateY.Value);
             bone.TranslateZ = UpdateKeyValues(bone.TranslateZ, num_TranslateZ.Value);
@@ -259,9 +280,6 @@ namespace BFRESAnimOffset
             bone.ScaleX = UpdateKeyValues(bone.ScaleX, num_ScaleX.Value);
             bone.ScaleY = UpdateKeyValues(bone.ScaleY, num_ScaleY.Value);
             bone.ScaleZ = UpdateKeyValues(bone.ScaleZ, num_ScaleZ.Value);
-
-            UpdateKeyDataPrintout(bone);
-            ResetOffsetValues();
         }
 
         private List<Key> UpdateKeyValues(List<Key> keys, decimal value)
@@ -383,6 +401,27 @@ namespace BFRESAnimOffset
             }
 
             return new List<string>() { "" };
+        }
+
+        private void LoadBFRES_Click(object sender, EventArgs e)
+        {
+            string path = FilePath_Click("Choose .bfres file...", false, new string[] { "BFRES Model (.bfres)" }).First();
+            if (File.Exists(path))
+            {
+                resFile = new ResFile(path);
+                MessageBox.Show("BFRES Loaded!");
+                chk_UseHierarchy.Enabled = true;
+                chk_UseHierarchy.Checked = true;
+
+                string path2 = FilePath_Click("Choose 2nd .bfres file...", false, new string[] { "BFRES Model (.bfres)" }).First();
+                if (File.Exists(path2))
+                {
+                    var resFile2 = new ResFile(path2);
+                    resFile.Models[0].Skeleton = resFile2.Models[0].Skeleton;
+                    resFile.Save(new FileStream("FRES.bfres", FileMode.OpenOrCreate));
+                    MessageBox.Show("Done comparing bones and outputting FRES.bfres");
+                }
+            }
         }
     }
 
